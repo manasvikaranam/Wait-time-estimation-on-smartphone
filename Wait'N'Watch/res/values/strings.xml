@@ -4,5 +4,7 @@
     <string name="app_name">Wait\'N\'Watch</string>
     <string name="hello_world">Hello world! I am Rohit</string>
     <string name="action_settings">Settings</string>
+    <string name="checkWaitTime">Check Wait-Time</string>
+    <string name="waitTimeView">Press button to view Wait Time</string>
 
 </resources>

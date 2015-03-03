@@ -1,0 +1,8 @@
+package com.example.uploader;
+
+public class Uploader{
+	
+	public Uploader() {
+		// TODO Auto-generated constructor stub
+	}
+}

@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="android.widget.TextView"/>
+<fullyQualifiedTypeName name="com.example.waitnwatch.R.id"/>
+<fullyQualifiedTypeName name="android.view.View"/>
+<fullyQualifiedTypeName name="android.provider.ContactsContract.Contacts.Data"/>
+<fullyQualifiedTypeName name="com.example.waitnwatch.data.Data"/>
+<fullyQualifiedTypeName name="java.util.Calendar"/>
+</qualifiedTypeNameHistroy>

@@ -1,0 +1,20 @@
+package com.example.uploader;
+
+import com.example.waitnwatch.data.Data;
+
+public class Uploader{
+	
+	public Uploader() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public void uploadData(Data data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void getWaitTime(Data data) {
+		// TODO Auto-generated method stub
+		
+	}
+}

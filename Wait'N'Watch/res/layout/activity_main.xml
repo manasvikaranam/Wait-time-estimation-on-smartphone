@@ -6,11 +6,38 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.waitnwatch.MainActivity" >
-
-    <TextView
+    tools:context="com.example.waitnwatch.layouts.MainActivity" >
+    <Button
+        android:id="@+id/checkWaitTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="146dp"
+        android:text="@string/checkWaitTime"
+        android:onClick="checkWaitTime" />
+
+    <TextView
+        android:id="@+id/waitTimeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        android:text="@string/waitTimeView"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="#FF0000"
+        android:textColor="#FFF"
+        android:layout_marginTop="16dp"
+        android:text="Not connected"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
