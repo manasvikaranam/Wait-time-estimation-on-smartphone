@@ -1,0 +1,32 @@
+package com.example.uploader;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import com.example.database.Data;
+
+public class Uploader{
+	
+	private final static String URL = "URL FOR THE SERVER";
+	private HttpClient httpclient;
+	private HttpGet httpget;
+	private HttpResponse response;
+	
+	public Uploader() {
+		// TODO Auto-generated constructor stub
+		 httpclient = new DefaultHttpClient();
+		 httpget = new HttpGet("http://10.0.2.2:8080/NetSecWebFiles/GetPassPhraseAndroid.php");
+	}
+
+	public void uploadData(Data data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public int getWaitTime(Data data) {
+		// TODO Auto-generated method stub
+		return 10;
+	}
+}

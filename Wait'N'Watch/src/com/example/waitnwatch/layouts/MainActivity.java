@@ -58,9 +58,19 @@ public class MainActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	
 	public void checkWaitTime(View view){
 		Data data = getCurrentData();
-		int waitTime = getWaitTime(data);
+		int waitTime = 0;
+		if(!isConnected()){
+		if(insertData(data))
+			makeToast( "Data Added");
+		else
+			makeToast("Some problem adding");
+		}
+		else
+		 waitTime = getWaitTime(data);
 		waitTimeView.setText("Wait time is "+ waitTime +" mins");
 	}
 
@@ -68,7 +78,10 @@ public class MainActivity extends ActionBarActivity {
 	private int getWaitTime(Data data) {
 
 		Uploader uploader = new Uploader();
-		uploader.uploadData(data);
+		
+		//uncomment once the server is up and chane the URL
+		//uploader.uploadData(data); 
+		
 		return uploader.getWaitTime(data);
 	}
 
@@ -78,6 +91,8 @@ public class MainActivity extends ActionBarActivity {
 		Calendar today = Calendar.getInstance();
 		return new Data(today.get(Calendar.WEEK_OF_YEAR), today.get(Calendar.DAY_OF_WEEK),today.get(Calendar.HOUR_OF_DAY)*6+today.get(Calendar.MINUTE)/10);
 	}
+	
+	
 	public boolean isConnected(){
 		ConnectivityManager connectionManager = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
 		NetworkInfo network = connectionManager.getActiveNetworkInfo();
@@ -86,6 +101,8 @@ public class MainActivity extends ActionBarActivity {
 		else
 			return false;    
 	}
+	
+	
 	public boolean insertData(Data data){
 
 		try {
@@ -97,13 +114,17 @@ public class MainActivity extends ActionBarActivity {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Toast.makeText(this, "Some database exception", Toast.LENGTH_LONG).show();
+			makeToast("Some database exception");
 		}
 		finally{
 			databaseOps.close();
 		}
 		return false;
-
+	}
+	
+	public void makeToast(String text){
+		
+		Toast.makeText(this, text, Toast.LENGTH_LONG).show();
 	}
 
 }

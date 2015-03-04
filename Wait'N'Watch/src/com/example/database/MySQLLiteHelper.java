@@ -8,17 +8,19 @@ import android.util.Log;
 public class MySQLLiteHelper extends SQLiteOpenHelper{
 	public static final String TABLE_DATA = "data";
 	public static final String COLUMN_WEEKOFYEAR = "week_of_year";
+	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_DAYOFWEEK = "day_of_week";
-	public static final String COLUMN_TIMEINTERVAL = "password";
+	public static final String COLUMN_TIMEINTERVAL = "time_interval";
 	private static final String DATABASE_NAME = "data.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 
 	// Database creation sql statement
-	private static final String DATABASE_CREATE = "create table " + TABLE_DATA + "("      
+	private static final String DATABASE_CREATE = "create table " + TABLE_DATA + "("  
+			+ COLUMN_ID+		   " INTEGER PRIMARY KEY AUTOINCREMENT,"
 			+ COLUMN_WEEKOFYEAR+   " INTEGER not null ," 
 			+ COLUMN_DAYOFWEEK+    " INTEGER not null ,"
-			+ COLUMN_TIMEINTERVAL+ " INTEGER not null ,"
-			+ "PRIMARY KEY("+COLUMN_WEEKOFYEAR+", "+COLUMN_DAYOFWEEK+", "+COLUMN_TIMEINTERVAL+" ) );";
+			+ COLUMN_TIMEINTERVAL+ " INTEGER not null "
+			+ " );";
 
 	public MySQLLiteHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);

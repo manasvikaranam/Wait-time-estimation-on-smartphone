@@ -2,7 +2,6 @@ package com.example.database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -12,7 +11,7 @@ public class DatabaseOps {
 	// Database fields
 	private SQLiteDatabase database;
 	private MySQLLiteHelper dbHelper;
-	private String[] allColumns = { MySQLLiteHelper.COLUMN_WEEKOFYEAR,MySQLLiteHelper.COLUMN_DAYOFWEEK,MySQLLiteHelper.COLUMN_TIMEINTERVAL };
+	//private String[] allColumns = { MySQLLiteHelper.COLUMN_WEEKOFYEAR,MySQLLiteHelper.COLUMN_DAYOFWEEK,MySQLLiteHelper.COLUMN_TIMEINTERVAL };
 
 	public DatabaseOps(Context context) {
 		dbHelper = new MySQLLiteHelper(context);

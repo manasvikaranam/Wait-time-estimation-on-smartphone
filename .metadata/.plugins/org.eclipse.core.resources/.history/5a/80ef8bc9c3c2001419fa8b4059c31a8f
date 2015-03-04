@@ -1,0 +1,54 @@
+package com.example.uploader;
+
+import java.io.IOException;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.example.database.Data;
+
+public class Uploader{
+	
+	private final static String URL = "URL FOR THE SERVER";
+	private HttpClient httpclient;
+	private HttpGet httpget;
+	private HttpResponse response;
+	private JSONObject data;
+	
+	public Uploader() {
+		// TODO Auto-generated constructor stub
+		 httpclient = new DefaultHttpClient();
+		 httpget = new HttpGet(URL);
+	}
+
+	public void uploadData(Data data) {
+		// TODO Auto-generated method stub
+		try {
+			this.data.put("weekOfYear", data.getWeekOfYear());
+			this.data.put("dayOfWeek", data.getDayOfWeek());
+			this.data.put("weekOfYear", data.getWeekOfYear());
+			response = httpclient.execute(httpget);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	public int getWaitTime(Data data) {
+		// TODO Auto-generated method stub
+		return 10;
+	}
+}
