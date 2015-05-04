@@ -103,6 +103,7 @@ public class MainActivity extends ActionBarActivity {
 				makeToast("Some problem adding");
 		}
 		else{
+			//insertDataToAWS(data);
 			waitTime = getWaitTime(data);
 		}
 		waitTimeView.setText("Wait time is "+ waitTime +" mins");

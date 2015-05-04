@@ -1,7 +1,12 @@
 package Prediction;
 
 import java.util.HashMap;
+
+import android.content.Context;
+
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.machinelearning.AmazonMachineLearningClient;
 import com.amazonaws.services.machinelearning.model.EntityStatus;
 import com.amazonaws.services.machinelearning.model.GetMLModelRequest;

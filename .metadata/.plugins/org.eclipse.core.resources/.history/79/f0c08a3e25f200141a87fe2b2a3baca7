@@ -2,11 +2,18 @@ package com.example.database;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+
+//
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
+import com.amazonaws.services.simpledb.AmazonSimpleDB;
 
 public class DatabaseOps {
 
@@ -44,14 +51,14 @@ public class DatabaseOps {
 	public List<Data> getAllCollectedData() {
 		// TODO Auto-generated method stub
 		List<Data> returnList = new ArrayList<Data>();
-
+		
 		Cursor c = database.rawQuery("SELECT * FROM '"+MySQLLiteHelper.TABLE_DATA+"'", null);
 		if(c.moveToFirst()){
-			do{
-				Data d = new Data(Integer.parseInt(c.getString(0)), Integer.parseInt(c.getString(1)),Integer.parseInt(c.getString(2)),Integer.parseInt(c.getString(3)));
-				returnList.add(d);
-			}while(c.moveToNext());
-		}
+            do{
+               Data d = new Data(Integer.parseInt(c.getString(0)), Integer.parseInt(c.getString(1)),Integer.parseInt(c.getString(2)),Integer.parseInt(c.getString(3)));
+               returnList.add(d);
+            }while(c.moveToNext());
+        }
 		deleteALLData();
 		return returnList;
 	}
@@ -59,7 +66,29 @@ public class DatabaseOps {
 	private void deleteALLData() {
 		// TODO Auto-generated method stub
 		database.execSQL("delete from "+ MySQLLiteHelper.TABLE_DATA);
-
+		
 	}
+
+	/*public void insertDataToAWS(Data data) {
+		// TODO Auto-generated method stub
+		setAWSDBInstance();
+		sdb.createDomain(new CreateDomainRequest(getDomain()));
+		List<ReplaceableAttribute> attributes = new ArrayList<ReplaceableAttribute>(1);
+		attributes.add(new ReplaceableAttribute().withName("weekOfYear").withValue(Integer.toString(data.getWeekOfYear())));
+		attributes.add(new ReplaceableAttribute().withName("dayOfWeek").withValue(Integer.toString(data.getDayOfWeek())));
+		attributes.add(new ReplaceableAttribute().withName("dayInterval").withValue(Integer.toString(data.getDayInterval())));
+		System.out.println(attributes);
+		sdb.putAttributes(new PutAttributesRequest(getDomain(),data.toString(),attributes));
+	}*/
+
+	/*private String getDomain() {
+		// TODO Auto-generated method stub
+		if(domain == null){
+			domain = getProperties().getProperty("domain");
+		}
+		return domain;
+	}*/
+
+	
 
 }

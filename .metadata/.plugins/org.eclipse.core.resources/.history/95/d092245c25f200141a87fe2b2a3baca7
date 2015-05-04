@@ -1,7 +1,12 @@
 package Prediction;
 
 import java.util.HashMap;
+
+import android.content.Context;
+
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.machinelearning.AmazonMachineLearningClient;
 import com.amazonaws.services.machinelearning.model.EntityStatus;
 import com.amazonaws.services.machinelearning.model.GetMLModelRequest;
@@ -13,9 +18,15 @@ import com.example.database.Data;
 
 public class Prediction {
 	
+	private Context context;
 	private AmazonMachineLearningClient client;
+	private CognitoCachingCredentialsProvider credentialsProvider;
 	private final String mlModelId = "ml-sRHm7r8mYgf";
 	private GetMLModelResult mlModelResult;
+	public Prediction(Context context) {
+		this.context = context;
+		// TODO Auto-generated constructor stub
+	}
 	public int getWaitTime(Data data) {
 		// TODO Auto-generated method stub
 		BasicAWSCredentials credentials = new BasicAWSCredentials("AKIAJYCGDFILHTZR5XDA","lZnftWMzIgQmdCStMVGggRrjOCDHGieZqsZYzpnv");
