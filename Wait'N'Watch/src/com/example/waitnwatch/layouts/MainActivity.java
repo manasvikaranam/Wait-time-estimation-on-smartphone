@@ -8,7 +8,12 @@ import org.apache.http.client.ClientProtocolException;
 
 import Prediction.Prediction;
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.SQLException;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.database.Data;
 import com.example.database.DatabaseOps;
 import com.example.uploader.Uploader;
@@ -31,7 +37,12 @@ public class MainActivity extends ActionBarActivity {
 	private TextView status;
 	private DatabaseOps databaseOps;
 	private Button checkWaitTime;
-	private Uploader uploader;
+	private static Uploader uploader;
+	private static Data data;
+	protected LocationManager locationManager;
+	private static final long POINT_RADIUS = 15;
+	private static final String PROX_ALERT_INTENT ="com.javacodegeeks.android.lbs.ProximityAlert";
+	private  ProximityIntentReceiver proxRecObj = new ProximityIntentReceiver();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +53,28 @@ public class MainActivity extends ActionBarActivity {
 		status = (TextView) findViewById(R.id.status);
 		checkWaitTime = (Button)findViewById(R.id.checkWaitTime);
 		checkWaitTime.setEnabled(false);
+
 		if(isConnected()){
+			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			addProximity(39.16847639,-86.49878996);
 			checkWaitTime.setEnabled(true);
 			uploadAllCollectedData();
 
 			status.setText("Connected");
 			status.setBackgroundColor(0xFF00CC00);
 		}
+	}
+
+
+	private void addProximity(double latitude, double longitude) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(PROX_ALERT_INTENT);
+		PendingIntent proximityIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+
+		IntentFilter filter = new IntentFilter(PROX_ALERT_INTENT);
+		locationManager.addProximityAlert(latitude,longitude,POINT_RADIUS,-1,proximityIntent);
+		registerReceiver(proxRecObj, filter);
+
 	}
 
 
@@ -71,7 +97,16 @@ public class MainActivity extends ActionBarActivity {
 			uploader.uploadALLCollectedData(dataList);
 	}
 
+	public static void uploadData(long startTime, long endTime){
+		long wTime = ProximityIntentReceiver.endTime - ProximityIntentReceiver.startTime;
+		int waitTime = (int)(wTime/1000)/60;
+		if(waitTime>2 && waitTime<15)
+			data.setWaitTime(waitTime);
+		if(uploader == null)
+			uploader = new Uploader();
+		uploader.uploadData(data); 
 
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -93,8 +128,7 @@ public class MainActivity extends ActionBarActivity {
 
 
 	public void checkWaitTime(View view) throws ClientProtocolException, IOException{
-		Data data = getCurrentData();
-
+		data  = getCurrentData();
 		int waitTime = 0;
 		if(!isConnected()){
 			if(insertData(data))
@@ -108,11 +142,7 @@ public class MainActivity extends ActionBarActivity {
 		waitTimeView.setText("Wait time is "+ waitTime +" mins");
 	}
 	private int getWaitTime(Data data) throws ClientProtocolException, IOException {
-		if(uploader == null)
-			uploader = new Uploader();
 
-		//uncomment once the server is up and chane the URL
-		uploader.uploadData(data); 
 		Prediction predict = new Prediction();
 		return predict.getWaitTime(data);
 	}
@@ -121,7 +151,7 @@ public class MainActivity extends ActionBarActivity {
 	private Data getCurrentData() {
 		// TODO Auto-generated method stub
 		Calendar today = Calendar.getInstance();
-		return new Data(today.get(Calendar.WEEK_OF_YEAR), today.get(Calendar.DAY_OF_WEEK),today.get(Calendar.HOUR_OF_DAY)*6+today.get(Calendar.MINUTE)/10,11);
+		return new Data(today.get(Calendar.WEEK_OF_YEAR), today.get(Calendar.DAY_OF_WEEK),today.get(Calendar.HOUR_OF_DAY)*6+today.get(Calendar.MINUTE)/10,-1);
 	}
 
 

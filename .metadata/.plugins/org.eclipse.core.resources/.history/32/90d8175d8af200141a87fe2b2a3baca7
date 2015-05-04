@@ -1,0 +1,5 @@
+package com.example.waitnwatch.layouts;
+
+public class ProximityIntentReceiver {
+
+}
