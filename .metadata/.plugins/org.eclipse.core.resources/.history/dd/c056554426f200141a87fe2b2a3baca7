@@ -107,6 +107,11 @@ public class MainActivity extends ActionBarActivity {
 		}
 		waitTimeView.setText("Wait time is "+ waitTime +" mins");
 	}
+
+
+
+
+
 	private int getWaitTime(Data data) throws ClientProtocolException, IOException {
 		if(uploader == null)
 			uploader = new Uploader();
