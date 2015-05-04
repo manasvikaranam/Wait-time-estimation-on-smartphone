@@ -2,12 +2,19 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="insertData" key="selection"/>
+		<item value="check" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="check"/>
+			<item value="toast"/>
+			<item value="insertDataToAWS"/>
+			<item value="4"/>
+			<item value="insert"/>
+			<item value="uploader"/>
+			<item value="show"/>
 			<item value="insertData"/>
 		</list>
 		<list key="replacehistory">

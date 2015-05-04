@@ -1,0 +1,12 @@
+package Prediction;
+
+import com.example.database.Data;
+
+public class Prediction {
+
+	public int getWaitTime(Data data) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

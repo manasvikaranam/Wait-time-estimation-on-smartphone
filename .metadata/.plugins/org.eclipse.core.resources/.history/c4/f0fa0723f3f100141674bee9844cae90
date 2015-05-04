@@ -1,0 +1,24 @@
+package Prediction;
+
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.regions.Regions;
+import com.example.database.Data;
+
+public class Prediction {
+	
+
+	public int getWaitTime(Data data) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	public CognitoCachingCredentialsProvider getCognitoInstance(){
+		if(credentialsProvider == null)
+			credentialsProvider = new CognitoCachingCredentialsProvider(
+					context, // Context
+					"us-east-1:a477b821-3f3f-48a1-a1e7-46e9ee73f027", // Identity Pool ID
+					Regions.US_EAST_1 // Region
+					);
+		return credentialsProvider;
+	}
+
+}

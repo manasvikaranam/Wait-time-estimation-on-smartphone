@@ -1,7 +1,13 @@
 package com.example.waitnwatch.layouts;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
+import org.apache.http.client.ClientProtocolException;
+
+import Prediction.Prediction;
 import android.app.Activity;
 import android.database.SQLException;
 import android.net.ConnectivityManager;
@@ -11,9 +17,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.regions.Regions;
 import com.example.database.Data;
 import com.example.database.DatabaseOps;
 import com.example.uploader.Uploader;
@@ -25,18 +34,45 @@ public class MainActivity extends ActionBarActivity {
 	private TextView waitTimeView;
 	private TextView status;
 	private DatabaseOps databaseOps;
+	private Button checkWaitTime;
+	private Uploader uploader;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);		
 		databaseOps = new DatabaseOps(this);
 		setContentView(R.layout.activity_main);
 		waitTimeView = (TextView) findViewById(R.id.waitTimeView);
 		status = (TextView) findViewById(R.id.status);
+		checkWaitTime = (Button)findViewById(R.id.checkWaitTime);
+		checkWaitTime.setEnabled(false);
 		if(isConnected()){
+			checkWaitTime.setEnabled(true);
+			uploadAllCollectedData();
+
 			status.setText("Connected");
 			status.setBackgroundColor(0xFF00CC00);
 		}
+	}
+
+
+	private void uploadAllCollectedData() {
+		// TODO Auto-generated method stub
+		if(uploader == null)
+			uploader = new Uploader();
+		List<Data> dataList = null;
+		try{
+			databaseOps.open();
+			dataList = databaseOps.getAllCollectedData();
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}	
+		finally{
+			databaseOps.close();
+		}
+		if(dataList.size() > 0)
+			uploader.uploadALLCollectedData(dataList);
 	}
 
 
@@ -58,41 +94,48 @@ public class MainActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	
-	public void checkWaitTime(View view){
+
+
+	public void checkWaitTime(View view) throws ClientProtocolException, IOException{
 		Data data = getCurrentData();
+
 		int waitTime = 0;
 		if(!isConnected()){
-		if(insertData(data))
-			makeToast( "Data Added");
-		else
-			makeToast("Some problem adding");
+			if(insertData(data))
+				makeToast( "Data Added");
+			else
+				makeToast("Some problem adding");
 		}
-		else
-		 waitTime = getWaitTime(data);
+		else{
+			//insertDataToAWS(data);
+			System.out.println(data);
+			waitTime = getWaitTime(data);
+		}
 		waitTimeView.setText("Wait time is "+ waitTime +" mins");
 	}
 
 
-	private int getWaitTime(Data data) {
 
-		Uploader uploader = new Uploader();
-		
+
+
+	private int getWaitTime(Data data) throws ClientProtocolException, IOException {
+		if(uploader == null)
+			uploader = new Uploader();
+
 		//uncomment once the server is up and chane the URL
-		//uploader.uploadData(data); 
-		
-		return uploader.getWaitTime(data);
+		uploader.uploadData(data); 
+		Prediction predict = new Prediction(getApplicationContext());
+		return predict.getWaitTime(data);
 	}
 
 
 	private Data getCurrentData() {
 		// TODO Auto-generated method stub
 		Calendar today = Calendar.getInstance();
-		return new Data(today.get(Calendar.WEEK_OF_YEAR), today.get(Calendar.DAY_OF_WEEK),today.get(Calendar.HOUR_OF_DAY)*6+today.get(Calendar.MINUTE)/10);
+		return new Data(today.get(Calendar.WEEK_OF_YEAR), today.get(Calendar.DAY_OF_WEEK),today.get(Calendar.HOUR_OF_DAY)*6+today.get(Calendar.MINUTE)/10,11);
 	}
-	
-	
+
+
 	public boolean isConnected(){
 		ConnectivityManager connectionManager = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
 		NetworkInfo network = connectionManager.getActiveNetworkInfo();
@@ -101,8 +144,8 @@ public class MainActivity extends ActionBarActivity {
 		else
 			return false;    
 	}
-	
-	
+
+
 	public boolean insertData(Data data){
 
 		try {
@@ -121,9 +164,9 @@ public class MainActivity extends ActionBarActivity {
 		}
 		return false;
 	}
-	
+
 	public void makeToast(String text){
-		
+
 		Toast.makeText(this, text, Toast.LENGTH_LONG).show();
 	}
 

@@ -11,15 +11,17 @@ public class MySQLLiteHelper extends SQLiteOpenHelper{
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_DAYOFWEEK = "day_of_week";
 	public static final String COLUMN_TIMEINTERVAL = "time_interval";
+	public static final String COLUMN_WAITTIME = "wait_time";
 	private static final String DATABASE_NAME = "data.db";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "create table " + TABLE_DATA + "("  
 			+ COLUMN_ID+		   " INTEGER PRIMARY KEY AUTOINCREMENT,"
 			+ COLUMN_WEEKOFYEAR+   " INTEGER not null ," 
 			+ COLUMN_DAYOFWEEK+    " INTEGER not null ,"
-			+ COLUMN_TIMEINTERVAL+ " INTEGER not null "
+			+ COLUMN_TIMEINTERVAL+ " INTEGER not null ,"
+			+ COLUMN_WAITTIME+ 	   " INTEGER not null "
 			+ " );";
 
 	public MySQLLiteHelper(Context context) {

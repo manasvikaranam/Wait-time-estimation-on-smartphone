@@ -1,0 +1,61 @@
+package Prediction;
+
+import android.content.Context;
+
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.machinelearning.AmazonMachineLearningClient;
+import com.amazonaws.services.machinelearning.model.EntityStatus;
+import com.amazonaws.services.machinelearning.model.GetMLModelRequest;
+import com.amazonaws.services.machinelearning.model.GetMLModelResult;
+import com.amazonaws.services.machinelearning.model.RealtimeEndpointStatus;
+import com.example.database.Data;
+
+public class Prediction {
+	
+	private Context context;
+	private AmazonMachineLearningClient client;
+	private CognitoCachingCredentialsProvider credentialsProvider;
+	private final String mlModelId = "ml-sRHm7r8mYgf";
+	public Prediction(Context context) {
+		this.context = context;
+		// TODO Auto-generated constructor stub
+	}
+	public int getWaitTime(Data data) {
+		// TODO Auto-generated method stub
+		client  =  new AmazonMachineLearningClient(getCognitoInstance());
+		createEndpoint();
+		return 0;
+	}
+	private void createEndpoint() {
+		// TODO Auto-generated method stub
+		GetMLModelRequest getMLModelRequest = new GetMLModelRequest();
+		getMLModelRequest.setMLModelId(mlModelId);
+		GetMLModelResult mlModelResult = client.getMLModel(getMLModelRequest);
+
+		// Validate that the ML model is completed
+		if (!mlModelResult.getStatus().equals(EntityStatus.COMPLETED.toString())) {
+		        System.out.println("ML Model is not completed: + mlModelResult.getStatus()");
+		        return;
+		}
+
+		// Validate that the realtime endpoint is ready
+		if (!mlModelResult.getEndpointInfo().getEndpointStatus().equals(RealtimeEndpointStatus.READY.toString()))
+		{
+		        System.out.println("Realtime endpoint is not ready: " + mlModelResult.getEndpointInfo().getEndpointStatus());
+		        return;
+		}
+		
+	}
+	public CognitoCachingCredentialsProvider getCognitoInstance(){
+		if(credentialsProvider == null)
+			credentialsProvider = new CognitoCachingCredentialsProvider(
+					context, // Context
+					"us-east-1:a477b821-3f3f-48a1-a1e7-46e9ee73f027", // Identity Pool ID
+					Regions.US_EAST_1 // Region
+					);
+		return credentialsProvider;
+	}
+	
+
+}
